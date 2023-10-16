@@ -15,23 +15,37 @@ RUN apt update && \
  wget \
  curl \
  git \
- nano 
+ nano \
+ tree \
+ jq
 
 ################################
 # Install Terraformer
 ################################
 
 # all,google,aws,kubernetes
-ENV export PROVIDER=aws 
-RUN curl -LO "https://github.com/GoogleCloudPlatform/terraformer/releases/download/$(curl -s https://api.github.com/repos/GoogleCloudPlatform/terraformer/releases/latest | grep tag_name | cut -d '"' -f 4)/terraformer-${PROVIDER}-linux-amd64"
+ENV PROVIDER=aws
+ENV PROVIDER_VERSION=5.21.0
+ENV OS=linux
+
+RUN curl --insecure -LO "https://github.com/GoogleCloudPlatform/terraformer/releases/download/$(curl -s https://api.github.com/repos/GoogleCloudPlatform/terraformer/releases/latest | grep tag_name | cut -d '"' -f 4)/terraformer-${PROVIDER}-linux-amd64"
 RUN chmod +x terraformer-${PROVIDER}-linux-amd64
 RUN mv terraformer-${PROVIDER}-linux-amd64 /usr/local/bin/terraformer
+
+################################
+# Install AWS provider
+################################
+RUN mkdir -p ~/.terraform.d/plugins/${OS}_amd64 && \
+ curl -L https://releases.hashicorp.com/terraform-provider-aws/${PROVIDER_VERSION}/terraform-provider-aws_${PROVIDER_VERSION}_${OS}_amd64.zip -o terraform-provider-aws.zip && \
+ unzip terraform-provider-aws.zip && \
+ rm terraform-provider-aws.zip && \
+ mv terraform-provider-aws_v${PROVIDER_VERSION}* ~/.terraform.d/plugins/${OS}_amd64/
 
 ################################
 # Install Terraform
 ################################
 
-RUN wget https://releases.hashicorp.com/terraform/1.6.1/terraform_1.6.1_linux_amd64.zip && \
+RUN wget --no-check-certificate https://releases.hashicorp.com/terraform/1.6.1/terraform_1.6.1_linux_amd64.zip && \
  unzip terraform_1.6.1_linux_amd64.zip && \
  rm terraform_1.6.1_linux_amd64.zip && \
  mv terraform /usr/local/bin/
