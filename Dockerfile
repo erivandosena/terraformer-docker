@@ -41,7 +41,7 @@ RUN wget https://releases.hashicorp.com/terraform/1.6.1/terraform_1.6.1_linux_am
 ################################
 
 RUN apt-get install -y python3-pip && \
- ln -s /usr/bin/python3 python && \
+ ln -s /usr/bin/python3 /usr/bin/python && \
  pip3 install --upgrade pip
 
 ################################
