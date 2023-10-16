@@ -5,7 +5,6 @@
 - [About](#about)
 - [Getting Started](#getting_started)
 - [Usage](#usage)
-- [Contributing](../CONTRIBUTING.md)
 
 ### About <a name = "about"></a>
 O Terraformer é uma ferramenta de código aberto que permite a extração de recursos de infraestrutura existentes de provedores de nuvem para configurações Terraform. 
@@ -16,7 +15,7 @@ As instruções fornecerão uma cópia do projeto em funcionamento em sua máqui
 ### Prerequisites
 Linux ou WSL/2  
 Docker  
-Git
+Git  
 Internet
 
 ### Installing
