@@ -11,7 +11,9 @@ LABEL \
   org.opencontainers.image.maintainer="Erivando Sena"
 
 RUN apt update && \
- apt install -y unzip \
+ apt-get install -y --no-install-recommends \
+ ca-certificates \
+ unzip \
  wget \
  curl \
  git \
@@ -22,13 +24,12 @@ RUN apt update && \
 ################################
 # Install Terraformer
 ################################
-
 # all,google,aws,kubernetes
 ENV PROVIDER=aws
 ENV PROVIDER_VERSION=5.21.0
 ENV OS=linux
 
-RUN curl --insecure -LO "https://github.com/GoogleCloudPlatform/terraformer/releases/download/$(curl -s https://api.github.com/repos/GoogleCloudPlatform/terraformer/releases/latest | grep tag_name | cut -d '"' -f 4)/terraformer-${PROVIDER}-linux-amd64"
+RUN curl -LO "https://github.com/GoogleCloudPlatform/terraformer/releases/download/$(curl -s https://api.github.com/repos/GoogleCloudPlatform/terraformer/releases/latest | grep tag_name | cut -d '"' -f 4)/terraformer-${PROVIDER}-linux-amd64"
 RUN chmod +x terraformer-${PROVIDER}-linux-amd64
 RUN mv terraformer-${PROVIDER}-linux-amd64 /usr/local/bin/terraformer
 
@@ -44,7 +45,6 @@ RUN mkdir -p ~/.terraform.d/plugins/${OS}_amd64 && \
 ################################
 # Install Terraform
 ################################
-
 RUN wget --no-check-certificate https://releases.hashicorp.com/terraform/1.6.1/terraform_1.6.1_linux_amd64.zip && \
  unzip terraform_1.6.1_linux_amd64.zip && \
  rm terraform_1.6.1_linux_amd64.zip && \
@@ -53,7 +53,6 @@ RUN wget --no-check-certificate https://releases.hashicorp.com/terraform/1.6.1/t
 ################################
 # Install python
 ################################
-
 RUN apt-get install -y python3-pip && \
  ln -s /usr/bin/python3 /usr/bin/python && \
  pip3 install --upgrade pip
@@ -71,7 +70,6 @@ RUN mkdir ~/.aws && touch ~/.aws/credentials && \
 ################################
 # Add User default
 ################################
-
 ARG USER=terraform
 
 RUN useradd -m -p '' ${USER}
