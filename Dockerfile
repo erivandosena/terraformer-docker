@@ -63,7 +63,10 @@ RUN apt-get install -y python3-pip && \
 ################################
 RUN pip install awscli --upgrade --user
 ENV PATH=~/.local/bin:$PATH
-RUN mkdir ~/.aws && touch ~/.aws/credentials
+RUN mkdir ~/.aws && touch ~/.aws/credentials && \
+ echo '[default]' > ~/.aws/credentials && \
+ echo 'aws_access_key_id = <YOUR Access key ID>' >> ~/.aws/credentials && \
+ echo 'aws_secret_access_key = <YOUR Secret access key>' >> ~/.aws/credentials
 
 ################################
 # Add User default
